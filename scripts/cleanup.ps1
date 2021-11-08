@@ -9,9 +9,20 @@ Function Cleanup {
     Get-ChildItem "C:\Windows\SoftwareDistribution\*" -Recurse -Force -Verbose -ErrorAction SilentlyContinue | Remove-Item -Force -Verbose -recurse -ErrorAction SilentlyContinue
 
     ## Deletes the contents of the Windows Temp folder.
-    Get-ChildItem "C:\Windows\Temp\*" -Recurse -Force -Verbose -ErrorAction SilentlyContinue | Remove-Item -Force -Verbose -recurse -ErrorAction SilentlyContinue
+    Get-ChildItem `
+        -Path "C:\Windows\Temp\*" `
+        -Exclude packer-ps-env-vars-*.psi `
+        -Recurse `
+        -Force `
+        -Verbose `
+        -ErrorAction SilentlyContinue `
+        | Remove-Item `
+            -Force `
+            -Verbose `
+            -Recurse `
+            -ErrorAction SilentlyContinue
 
-    ## Delets all files and folders in user's Temp folder.
+    ## Deletes all files and folders in user's Temp folder.
     Get-ChildItem "C:\users\*\AppData\Local\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Remove-Item -Force -Verbose -recurse -ErrorAction SilentlyContinue
 
     ## Remove all files and folders in user's Temporary Internet Files.

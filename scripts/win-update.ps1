@@ -6,7 +6,7 @@ $ProgressPreference = "SilentlyContinue"
 Write-Output "***** Starting PSWindowsUpdate Installation"
 
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
-Install-Module -Name PSWindowsUpdate -Force
+Install-Module -Name PSWindowsUpdate -Force  -RequiredVersion 2.1.0.2
 
 if (Get-ChildItem "C:\Program Files\WindowsPowerShell\Modules\PSWindowsUpdate") {
     Write-Output "***** PSWindowsUpdate installed successfully"

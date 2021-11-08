@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <unattend xmlns="urn:schemas-microsoft-com:unattend">
     <settings pass="windowsPE">
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-international-core-winpe -->
             <SetupUILanguage>
                 <UILanguage>en-US</UILanguage>
@@ -9,39 +9,60 @@
             <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
-            <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>en-US</UserLocale>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-setup -->
             <DiskConfiguration>
+                <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-setup-diskconfiguration -->
+                <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-setup-diskconfiguration-disk-modifypartitions-modifypartition-typeid -->
                 <Disk wcm:action="add">
                     <CreatePartitions>
                         <CreatePartition wcm:action="add">
                             <Type>Primary</Type>
                             <Order>1</Order>
-                            <Size>499</Size>
+                            <Size>500</Size>
+                        </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>4</Order>
+                            <Type>EFI</Type>
+                            <Size>100</Size>
                         </CreatePartition>
                         <CreatePartition wcm:action="add">
                             <Order>2</Order>
                             <Type>Primary</Type>
                             <Extend>true</Extend>
                         </CreatePartition>
+                        <CreatePartition wcm:action="add">
+                            <Order>3</Order>
+                            <Type>MSR</Type>
+                            <Size>16</Size>
+                        </CreatePartition>
                     </CreatePartitions>
                     <ModifyPartitions>
                         <ModifyPartition wcm:action="add">
-                            <Active>true</Active>
-                            <Format>NTFS</Format>
-                            <Label>boot</Label>
                             <Order>1</Order>
                             <PartitionID>1</PartitionID>
+                            <Format>NTFS</Format>
+                            <Label>Recovery</Label>
+                            <TypeID>de94bba4-06d1-4d40-a16a-bfd50179d6ac</TypeID>
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
-                            <Format>NTFS</Format>
-                            <Label>Windows 2019</Label>
-                            <Letter>C</Letter>
+                            <Order>4</Order>
+                            <PartitionID>4</PartitionID>
+                            <Label>System</Label>
+                            <Format>FAT32</Format>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
                             <Order>2</Order>
                             <PartitionID>2</PartitionID>
+                            <Label>Windows</Label>
+                            <Format>NTFS</Format>
+                            <Letter>C</Letter>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Order>3</Order>
+                            <PartitionID>3</PartitionID>
                         </ModifyPartition>
                     </ModifyPartitions>
                     <DiskID>0</DiskID>
@@ -54,8 +75,8 @@
                     <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-setup-imageinstall-dataimage-installfrom-metadata-key -->
                     <!-- Get-WindowsImage -ImagePath D:\sources\install.wim -->
                         <MetaData wcm:action="add">
-                            <Key>/IMAGE/INDEX </Key>
-                            <Value>2</Value>
+                            <Key>/IMAGE/NAME</Key>
+                            <Value>Windows Server 2019 SERVERSTANDARD</Value>
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -71,47 +92,47 @@
                     <!-- You must uncomment the Key element (and optionally insert your own key) if you are using retail or volume license ISOs -->
                     <!--<Key>WC2BQ-8NRM3-FDDYY-2BFGV-KHKQY</Key>-->
                     <WillShowUI>OnError</WillShowUI>
+                    <!--<Key>N69G4-B89J2-4G8F4-WWYCC-J464C</Key>-->
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
-                <FullName>Packer</FullName>
-                <Organization>Packer</Organization>
+                <FullName>Windows Server 2019 VM</FullName>
+                <Organization>MyOrg</Organization>
             </UserData>
         </component>
     </settings>
     <settings pass="specialize">
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-international-core -->
             <InputLocale>en-US</InputLocale>
             <SystemLocale>en-US</SystemLocale>
             <UILanguage>en-US</UILanguage>
-            <UILanguageFallback>en-US</UILanguageFallback>
             <UserLocale>en-US</UserLocale>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS"  xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup -->
-            <ComputerName>packer-win2019</ComputerName>
-            <TimeZone>Romance Standard Time</TimeZone>
+            <ComputerName>Windows Server 2019 LocalDev</ComputerName>
+            <TimeZone>Pacific Standard Time</TimeZone>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-ServerManager-SvrMgrNc" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-servermanager-svrmgrnc -->
             <DoNotOpenServerManagerAtLogon>true</DoNotOpenServerManagerAtLogon>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-IE-ESC" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-IE-ESC" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-ie-esc -->
             <IEHardenAdmin>false</IEHardenAdmin>
-            <IEHardenUser>true</IEHardenUser>
+            <IEHardenUser>false</IEHardenUser>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-OutOfBoxExperience" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-OutOfBoxExperience" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-outofboxexperience -->
             <DoNotOpenInitialConfigurationTasksAtLogon>true</DoNotOpenInitialConfigurationTasksAtLogon>
         </component>
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-Security-SPP-UX" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-security-spp-ux -->
             <SkipAutoActivation>true</SkipAutoActivation>
         </component>
     </settings>
     <settings pass="oobeSystem">
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup -->
             <AutoLogon>
                 <Password>
@@ -170,7 +191,7 @@
                 <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
                 <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
                 <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
-                <NetworkLocation>Home</NetworkLocation>
+                <NetworkLocation>Work</NetworkLocation>
                 <ProtectYourPC>1</ProtectYourPC>
             </OOBE>
             <UserAccounts>
@@ -178,15 +199,39 @@
                     <Value>packer</Value>
                     <PlainText>true</PlainText>
                 </AdministratorPassword>
+                <LocalAccounts>
+                    <LocalAccount wcm:action="add">
+                        <Password>
+                            <Value>packer</Value>
+                            <PlainText>true</PlainText>
+                        </Password>
+                        <Description>The Vagrant User</Description>
+                        <DisplayName>vagrant</DisplayName>
+                        <Group>Administrators</Group>
+                        <Name>Vagrant</Name>
+                    </LocalAccount>
+                </LocalAccounts>
             </UserAccounts>
-            <RegisteredOwner/>
+            <RegisteredOwner>Me</RegisteredOwner>
+            <RegisteredOrganization>MyOrg</RegisteredOrganization>
+            <DesktopOptimization>
+                <ShowWindowsStoreAppsOnTaskbar>false</ShowWindowsStoreAppsOnTaskbar>
+                <GoToDesktopOnSignIn>true</GoToDesktopOnSignIn>
+            </DesktopOptimization>
+            <TimeZone>PST</TimeZone>
+        </component>
+        <component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <InputLocale>en-US</InputLocale>
+            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>en-US</UILanguage>
+            <UserLocale>en-US</UserLocale>
         </component>
     </settings>
     <settings pass="offlineServicing">
-        <component xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+        <component name="Microsoft-Windows-LUA-Settings" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <!-- https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-lua-settings -->
             <EnableLUA>false</EnableLUA>
         </component>
     </settings>
-    <cpi:offlineImage xmlns:cpi="urn:schemas-microsoft-com:cpi" cpi:source=""/>
+    <cpi:offlineImage cpi:source="" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
