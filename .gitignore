@@ -1,3 +1,9 @@
+.DS_Store
 *.vmdk
 *.ovf
-.idea
+/build.log
+/.idea
+/packer_cache/
+/vagrant/
+/virtualbox-iso/
+/packer-plugin-*

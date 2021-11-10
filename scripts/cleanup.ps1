@@ -1,17 +1,8 @@
-Function Cleanup { 
-
-    Clear-Host
-
-    ## Stops the windows update service.
-    Get-Service -Name wuauserv | Stop-Service -Force -Verbose -ErrorAction SilentlyContinue
-
-    ## Deletes the contents of windows software distribution.
-    Get-ChildItem "C:\Windows\SoftwareDistribution\*" -Recurse -Force -Verbose -ErrorAction SilentlyContinue | Remove-Item -Force -Verbose -recurse -ErrorAction SilentlyContinue
-
-    ## Deletes the contents of the Windows Temp folder.
-    Get-ChildItem `
-        -Path "C:\Windows\Temp\*" `
-        -Exclude packer-ps-env-vars-*.psi `
+Function Remove-Files {
+Param (
+    [string]$Filespec
+)
+    Get-ChildItem "$Filespec" `
         -Recurse `
         -Force `
         -Verbose `
@@ -21,12 +12,41 @@ Function Cleanup {
             -Verbose `
             -Recurse `
             -ErrorAction SilentlyContinue
+}
+Function Cleanup {
 
-    ## Deletes all files and folders in user's Temp folder.
-    Get-ChildItem "C:\users\*\AppData\Local\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue | Remove-Item -Force -Verbose -recurse -ErrorAction SilentlyContinue
+    Write-Output "Clearing Host."
+    Clear-Host
 
-    ## Remove all files and folders in user's Temporary Internet Files.
-    Get-ChildItem "C:\users\*\AppData\Local\Microsoft\Windows\Temporary Internet Files\*" -Recurse -Force -Verbose -ErrorAction SilentlyContinue | Remove-Item -Force -recurse -ErrorAction SilentlyContinue
+    Write-Output "Stopping the Windows update service."
+    Get-Service -Name wuauserv `
+        | Stop-Service `
+            -Force `
+            -Verbose `
+            -ErrorAction SilentlyContinue
+
+    Write-Output "Deleting the contents of Windows software distribution."
+    Remove-Files "C:\Windows\SoftwareDistribution\*"
+
+    Write-Output "BYPASSING Deletion the Windows Temp folder contents."
+#     Get-ChildItem `
+#         -Path "C:`Windows`Temp`*" `
+#         -Exclude packer-ps-env-vars-*.psi `
+#         -Recurse `
+#         -Force `
+#         -Verbose `
+#         -ErrorAction SilentlyContinue `
+#         | Remove-Item `
+#             -Force `
+#             -Verbose `
+#             -Recurse `
+#             -ErrorAction SilentlyContinue
+
+    Write-Output "Deleting all files and folders in user's Temp folder."
+    Remove-Files "C:\users\*\AppData\Local\Temp\*"
+
+    Write-Output "Removing all files and folders in user's Temporary Internet Files."
+    Remove-Files "C:\users\*\AppData\Local\Microsoft\Windows\Temporary Internet Files\*"
 }
 
 Cleanup

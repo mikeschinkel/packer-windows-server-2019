@@ -18,12 +18,17 @@
 
 packer {
   required_plugins {
+    vmware = {
+      source  = "github.com/hashicorp/vmware"
+      version = "~> v1.0.3"
+    }
   }
 }
 
 variable "boot_wait" {
   type    = string
-  default = "5s"
+  # If the boot gets stuck on the UEFI Shell, increase or decrease this amount
+  default = "3s"
 }
 
 variable "disk_size" {
@@ -53,52 +58,66 @@ variable "numvcpus" {
 
 variable "vm_name" {
   type    = string
-  default = "Win2019_17763"
+  default = "WindowServer2019.17763"
 }
 
-variable "winrm_password" {
-  type    = string
-  default = "packer"
-}
-
-variable "winrm_username" {
+variable "username" {
   type    = string
   default = "Administrator"
+}
+
+variable "password" {
+  type    = string
+  default = "packer"
 }
 
 # source blocks are generated from your builders; a source can be referenced in
 # build blocks. A build block runs provisioner and post-processors on a
 # source. Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
-source "virtualbox-iso" "windows-server_1" {
-  boot_command         = ["<spacebar>"]
+source "virtualbox-iso" "virtualbox" {
+  format               = "ova"
+  output_directory     = "${source.name}"
+  output_filename      = "${var.vm_name}"
+  boot_command         = ["<enter>"]
   boot_wait            = "${var.boot_wait}"
   communicator         = "winrm"
   disk_size            = "${var.disk_size}"
   guest_additions_mode = "disable"
-  guest_os_type        = "Windows2016_64"
+  guest_os_type        = "Windows2019_64"
   headless             = false
   iso_checksum         = "${var.iso_checksum}"
   iso_interface        = "sata"
   iso_url              = "${var.iso_url}"
   shutdown_command     = "shutdown /s /t 5 /f /d p:4:1 /c \"Packer Shutdown\""
   shutdown_timeout     = "30m"
-  vboxmanage           = [["modifyvm", "{{ .Name }}", "--memory", "${var.memsize}"], ["modifyvm", "{{ .Name }}", "--cpus", "${var.numvcpus}"], ["modifyvm", "{{ .Name }}", "--firmware", "EFI"], ["storageattach", "{{ .Name }}", "--storagectl", "SATA Controller", "--type", "dvddrive", "--port", "3", "--medium", "./autounattend/autounattend-uefi-gui.iso"]]
+  vboxmanage           = [
+    ["modifyvm", "{{ .Name }}", "--memory", "${var.memsize}"],
+    ["modifyvm", "{{ .Name }}", "--cpus", "${var.numvcpus}"],
+    ["modifyvm", "{{ .Name }}", "--firmware", "EFI"],
+    [
+      "storageattach", "{{ .Name }}", "--storagectl", "SATA Controller", "--type", "dvddrive", "--port", "4",
+      "--medium", "./autounattend/autounattend.iso"
+    ]
+  ]
   vm_name              = "${var.vm_name}"
   winrm_insecure       = true
-  winrm_password       = "${var.winrm_password}"
+  winrm_password       = "${var.password}"
   winrm_timeout        = "4h"
   winrm_use_ssl        = true
-  winrm_username       = "${var.winrm_username}"
+  winrm_username       = "${var.username}"
 }
 
-source "vmware-iso" "windows-server_2" {
+source "vmware-iso" "vmware" {
+  format           = "ova"
+  output_directory = "${source.name}"
+  output_filename  = "${var.vm_name}"
   boot_command     = ["<spacebar>"]
   boot_wait        = "${var.boot_wait}"
   communicator     = "winrm"
   disk_size        = "${var.disk_size}"
   disk_type_id     = "0"
-  guest_os_type    = "windows9srv-64"
+  guest_os_type    = "windows9Server64Guest"
   headless         = false
   iso_checksum     = "${var.iso_checksum}"
   iso_url          = "${var.iso_url}"
@@ -106,7 +125,7 @@ source "vmware-iso" "windows-server_2" {
   shutdown_timeout = "30m"
   skip_compaction  = false
   vm_name          = "${var.vm_name}"
-  vmx_data = {
+  vmx_data         = {
     firmware            = "efi"
     cdrom_type          = "sata"
     memsize             = "${var.memsize}"
@@ -114,18 +133,21 @@ source "vmware-iso" "windows-server_2" {
     "scsi0.virtualDev"  = "lsisas1068"
     "virtualHW.version" = "14"
   }
-  winrm_insecure = true
-  winrm_password = "${var.winrm_password}"
-  winrm_timeout  = "4h"
-  winrm_use_ssl  = true
-  winrm_username = "${var.winrm_username}"
+  winrm_insecure   = true
+  winrm_password   = "${var.password}"
+  winrm_timeout    = "4h"
+  winrm_use_ssl    = true
+  winrm_username   = "${var.username}"
 }
 
 # a build block invokes sources and runs provisioning steps on them. The
 # documentation for build blocks can be found here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/build
 build {
-  sources = [ "source.virtualbox-iso.windows-server_1","source.vmware-iso.windows-server_2"]
+  sources = [
+    "source.virtualbox-iso.virtualbox",
+    "source.vmware-iso.vmware"
+  ]
 
   provisioner "powershell" {
     only         = ["vmware-iso"]
@@ -166,6 +188,16 @@ build {
   provisioner "powershell" {
     pause_before = "1m0s"
     scripts      = ["scripts/cleanup.ps1"]
+  }
+
+  post-processor "manifest" {
+    type       = "${source.output_directory}"
+    output     = "manifest.json"
+    strip_path = true
+    custom_data {
+      os_type = "${source.guest_os_type}"
+      vm_name = "${var.vm_name}"
+    }
   }
 
 }
