@@ -70,6 +70,12 @@ powercfg /change hibernate-timeout-dc 0
 # Disable password expiration for Administrator
 Set-LocalUser Administrator -PasswordNeverExpires $true
 
+# Enable RDP
+# See https://computingforgeeks.com/how-to-enable-remote-desktop-protocol-rdp-on-windows-server-2019/
+Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name fDenyTSConnections -Value 0
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+
 # Configure PowerShell prompt
 $psprofile = @'
 Set-Location /

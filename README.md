@@ -70,13 +70,16 @@ These are links that are useful for this repo's use-case, which are at the inter
 - [Windows System Image Manager Technical Reference](https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/wsim/windows-system-image-manager-technical-reference)
   - [Open a Windows Image or Catalog File](https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/wsim/open-a-windows-image-or-catalog-file)
   - [What is the difference between boot.wim and install.wim?](https://www.mvorganizing.org/what-is-the-difference-between-boot-wim-and-install-wim/)
+  - [How To Create A Windows Server 2019 Installation Answer File](https://techsnips.io/snips/how-to-create-a-windows-server-2019-installation-answer-file-using-windows-systems-image-manager/)
 - [How to create an unattended installation of Windows 10](https://www.windowscentral.com/how-create-unattended-media-do-automated-installation-windows-10)
 - 
 - [Create a new WinPE boot image](https://sysmansquad.com/2021/02/22/create-a-new-winpe-boot-image/)
 - [Key Management Services (KMS) client activation and product keys](https://docs.microsoft.com/en-us/windows-server/get-started/kms-client-activation-keys)
 - [Windows PowerShell Desired State Configuration (DSC) Overview](https://docs.microsoft.com/en-us/powershell/scripting/dsc/overview/overview)
 - [Packer and Vagrant provisioning for Windows 2019 libvirt VM](https://github.com/deargle/lab-windows-2019-vuln)
-
+- [Debugging a Packer build](http://pinter.org/archives/6871)
+- [Enable Remote Desktop Protocol (RDP) on Windows Server 2019](https://computingforgeeks.com/how-to-enable-remote-desktop-protocol-rdp-on-windows-server-2019/)
+- [How do I set the SMB username and password?](https://stackoverflow.com/a/44395248/102699)
 ### GoLang
 - [go-artifactory](https://github.com/lusis/go-artifactory)
 - [ovaify](https://github.com/stephen-fox/ovaify)

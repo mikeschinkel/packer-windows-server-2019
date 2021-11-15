@@ -1,9 +1,14 @@
 .DS_Store
 *.vmdk
+*.ova
 *.ovf
+*.box
+*.vdi
 /build.log
 /.idea
 /packer_cache/
 /vagrant/
-/virtualbox-iso/
+/vmware/
+/virtualbox/
 /packer-plugin-*
+/box-local.json

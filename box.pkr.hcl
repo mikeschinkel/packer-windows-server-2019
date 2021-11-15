@@ -23,7 +23,7 @@ build {
   post-processors {
     post-processor "artifice" {
       files = [
-        "${path.cwd}/virtualbox-iso/${var.vm_name}.ova",
+        "${path.cwd}/virtualbox/${var.vm_name}.ova",
       ]
     }
     post-processor "vagrant" {
