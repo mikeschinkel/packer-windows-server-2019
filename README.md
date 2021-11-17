@@ -8,6 +8,12 @@ This repo contains Packer scripts to create a UEFI 2019 Windows Server OVA and t
 3. Run `./box.sh`
 4. Find Vagrant box in `/.vagrant`
 
+## How To
+- See available drives from Windows CLI?
+  ```
+  wmic logicaldisk get caption
+  ```
+
 
 ## Directly and Indirectly-related Links
 These are links that are useful for this repo's use-case, which are at the intersection of Packer, Windows, Vagrant and VirtualBox.

@@ -12,13 +12,13 @@ variable "vm_name" {
   default = "WindowServer2019.17763"
 }
 
-source "null" "example" {
+source "null" "builder" {
   communicator = "none"
 }
 
 build {
   sources = [
-    "source.null.example"
+    "source.null.builder"
   ]
   post-processors {
     post-processor "artifice" {

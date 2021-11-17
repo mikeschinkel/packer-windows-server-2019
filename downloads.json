@@ -1,0 +1,91 @@
+[
+   {
+      "name": "Windows Admin Center",
+      "usable_life": "unlimited",
+      "url": "https://download.microsoft.com/download/1/0/5/1059800B-F375-451C-B37E-758FFC7C8C8B/WindowsAdminCenter2110.msi",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server",
+      "format": "msi"
+   },
+   {
+      "name": "Windows Server 2019",
+      "usable_life": "180days",
+      "url": "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server",
+      "language": "english",
+      "format": "iso"
+   },
+   {
+      "name": "Hyper-V Server 2019",
+      "usable_life": "unlimited",
+      "url": "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVERHYPERCORE_OEM_x64FRE_en-us_1.iso",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server",
+      "language": "english",
+      "format": "iso"
+   },
+   {
+      "name": "Windows Server 2022",
+      "usable_life": "180days",
+      "url": "https://software-download.microsoft.com/download/sg/20348.169.210806-2348.fe_release_svc_refresh_SERVER_EVAL_x64FRE_en-us.iso",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server",
+      "language": "english",
+      "format": "iso"
+   },
+   {
+      "name": "SQL Server 2019 Developer",
+      "usable_life": "unlimited",
+      "url": "https://download.microsoft.com/download/d/a/2/da259851-b941-459d-989c-54a18a5d44dd/SQL2019-SSEI-Dev.exe",
+      "source": "https://www.microsoft.com/en-us/sql-server/sql-server-downloads",
+      "format": "exe"
+   },
+   {
+      "name": "SQL Server 2019",
+      "usable_life": "180days",
+      "url": "https://download.microsoft.com/download/4/8/6/486005eb-7aa8-4128-aac0-6569782b37b0/SQL2019-SSEI-Eval.exe",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server",
+      "language": "english",
+      "format": "exe"
+   },
+   {
+      "name": "SQL Server 2017",
+      "usable_life": "180days",
+      "url": "https://download.microsoft.com/download/5/2/2/522EE642-941E-47A6-8431-57F0C2694EDF/SQLServer2017-SSEI-Eval.exe",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server",
+      "language": "english",
+      "format": "exe"
+   },
+   {
+      "name": "SQL Server 2016",
+      "usable_life": "180days",
+      "url": "https://download.microsoft.com/download/A/C/6/AC6F2802-4CC4-40B2-B333-395A4291EF29/SQLServer2016-SSEI-Eval.exe",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server",
+      "language": "english",
+      "format": "exe"
+   },
+   {
+      "name": "SQL Server 2014",
+      "usable_life": "180days",
+      "url": "http://download.microsoft.com/download/7/9/F/79F4584A-A957-436B-8534-3397F33790A6/SQLServer2014SP3-FullSlipstream-x64-ENU.exe",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server",
+      "language": "english",
+      "format": "exe",
+      "platform": "64bit"
+   },
+   {
+      "name": "SQL Server 2014",
+      "usable_life": "180days",
+      "url": "https://download.microsoft.com/download/7/9/F/79F4584A-A957-436B-8534-3397F33790A6/SQLServer2014SP3-FullSlipstream-x64-ENU.box",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server",
+      "language": "english",
+      "format": "box",
+      "platform": "64bit"
+   },
+   {
+      "name": "SQL Server 2014",
+      "usable_life": "180days",
+      "url": "http://download.microsoft.com/download/7/9/F/79F4584A-A957-436B-8534-3397F33790A6/SQLServer2014SP3-FullSlipstream-x64-ENU.iso",
+      "source": "https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server",
+      "language": "english",
+      "format": "iso",
+      "platform": "64bit"
+   }
+]

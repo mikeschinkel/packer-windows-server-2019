@@ -4,53 +4,35 @@ packer {
       source  = "github.com/hashicorp/vmware"
       version = "~> v1.0.3"
     }
+#    download = {
+#      version = "~> 0.0.1"
+#      source = "github.com/mikeschinkel/download"
+#    }
   }
 }
 
-variable "boot_wait" {
-  type    = string
-  # If the boot gets stuck on the UEFI Shell, decrease this wait time
-  default = "3s"
-}
+#data "download-url" "sql_server" {
+#  url = "https://download.microsoft.com/download/4/8/6/486005eb-7aa8-4128-aac0-6569782b37b0/SQL2019-SSEI-Eval.exe"
+#  description = "Microsoft SQL Server 2019"
+#  filename = "ss_install.exe"
+#  checksum = "none"
+#}
+#
+#data "download-url" "chocolatey" {
+#  url = "https://community.chocolatey.org/install.ps1"
+#  description = "Chocolatey Package Manager for Windows"
+#}
 
-variable "disk_size" {
-  type    = string
-  default = "40960"
-}
-
-variable "iso_checksum" {
-  type    = string
-  default = "3022424f777b66a698047ba1c37812026b9714c5"
-}
-
-variable "iso_url" {
-  type    = string
-  default = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
-}
-
-variable "memsize" {
-  type    = string
-  default = "2048"
-}
-
-variable "numvcpus" {
-  type    = string
-  default = "2"
-}
-
-variable "vm_name" {
-  type    = string
-  default = "WindowServer2019.17763"
-}
-
-variable "username" {
-  type    = string
-  default = "Administrator"
-}
-
-variable "password" {
-  type    = string
-  default = "packer"
+locals {
+  boot_wait = "3s"  # If the boot gets stuck on the UEFI Shell, decrease this wait time
+  disk_size = 40960
+  iso_checksum = "3022424f777b66a698047ba1c37812026b9714c5"
+  iso_url = "https://software-download.microsoft.com/download/pr/17763.737.190906-2324.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_en-us_1.iso"
+  memsize = 2048
+  numvcpus = 2
+  vm_name = "WindowServer2019.17763"
+  username = "Administrator"
+  password = "packer"
 }
 
 # source blocks are generated from your builders; a source can be referenced in
@@ -60,67 +42,63 @@ variable "password" {
 source "virtualbox-iso" "virtualbox" {
   format               = "ova"
   output_directory     = "virtualbox"
-  output_filename      = "${var.vm_name}"
+  output_filename      = "${local.vm_name}"
   boot_command         = ["<enter>"]
-  boot_wait            = "${var.boot_wait}"
+  boot_wait            = "${local.boot_wait}"
   communicator         = "winrm"
-  disk_size            = "${var.disk_size}"
+  disk_size            = "${local.disk_size}"
   guest_additions_mode = "disable"
   guest_os_type        = "Windows2019_64"
   headless             = false
-  iso_checksum         = "${var.iso_checksum}"
+  iso_checksum         = "${local.iso_checksum}"
   iso_interface        = "sata"
-  iso_url              = "${var.iso_url}"
-  cd_files             = ["./autounattend.xml"]
+  iso_url              = "${local.iso_url}"
+  cd_files             = ["./autounattend.xml","./scripts"]
   shutdown_command     = "shutdown /s /t 5 /f /d p:4:1 /c \"Packer Shutdown\""
   shutdown_timeout     = "30m"
   vboxmanage           = [
-    ["modifyvm", "{{ .Name }}", "--memory", "${var.memsize}"],
-    ["modifyvm", "{{ .Name }}", "--cpus", "${var.numvcpus}"],
+    ["modifyvm", "{{ .Name }}", "--memory", "${local.memsize}"],
+    ["modifyvm", "{{ .Name }}", "--cpus", "${local.numvcpus}"],
     ["modifyvm", "{{ .Name }}", "--firmware", "EFI"]
-#    ,[
-#      "storageattach", "{{ .Name }}", "--storagectl", "SATA Controller", "--type", "dvddrive", "--port", "4",
-#      "--medium", "./autounattend/autounattend.iso"
-#    ]
   ]
-  vm_name              = "${var.vm_name}"
+  vm_name              = "${local.vm_name}"
   winrm_insecure       = true
-  winrm_password       = "${var.password}"
+  winrm_password       = "${local.password}"
   winrm_timeout        = "4h"
   winrm_use_ssl        = true
-  winrm_username       = "${var.username}"
+  winrm_username       = "${local.username}"
 }
 
-source "vmware-iso" "vmware" {
+source "vmware-iso" "vmware_NOT_TESTED" {
   format           = "ova"
   output_directory = "vmware"
-  output_filename  = "${var.vm_name}"
+  output_filename  = "${local.vm_name}"
   boot_command     = ["<spacebar>"]
-  boot_wait        = "${var.boot_wait}"
+  boot_wait        = "${local.boot_wait}"
   communicator     = "winrm"
-  disk_size        = "${var.disk_size}"
+  disk_size        = "${local.disk_size}"
   disk_type_id     = "0"
   guest_os_type    = "windows9Server64Guest"
   headless         = false
-  iso_checksum     = "${var.iso_checksum}"
-  iso_url          = "${var.iso_url}"
+  iso_checksum     = "${local.iso_checksum}"
+  iso_url          = "${local.iso_url}"
   shutdown_command = "shutdown /s /t 5 /f /d p:4:1 /c \"Packer Shutdown\""
   shutdown_timeout = "30m"
   skip_compaction  = false
-  vm_name          = "${var.vm_name}"
+  vm_name          = "${local.vm_name}"
   vmx_data         = {
     firmware            = "efi"
     cdrom_type          = "sata"
-    memsize             = "${var.memsize}"
-    numvcpus            = "${var.numvcpus}"
+    memsize             = "${local.memsize}"
+    numvcpus            = "${local.numvcpus}"
     "scsi0.virtualDev"  = "lsisas1068"
     "virtualHW.version" = "14"
   }
   winrm_insecure   = true
-  winrm_password   = "${var.password}"
+  winrm_password   = "${local.password}"
   winrm_timeout    = "4h"
   winrm_use_ssl    = true
-  winrm_username   = "${var.username}"
+  winrm_username   = "${local.username}"
 }
 
 # a build block invokes sources and runs provisioning steps on them. The
@@ -129,7 +107,7 @@ source "vmware-iso" "vmware" {
 build {
   sources = [
     "source.virtualbox-iso.virtualbox",
-    "source.vmware-iso.vmware"
+    "source.vmware-iso.vmware_NOT_TESTED"
   ]
 
   provisioner "powershell" {
@@ -178,8 +156,8 @@ build {
     strip_path  = true
     custom_data = {
       hypervisor = "${source.name}"
-      iso        = "${var.iso_url}"
-      vm_name    = "${var.vm_name}"
+      iso        = "${local.iso_url}"
+      vm_name    = "${local.vm_name}"
     }
   }
 

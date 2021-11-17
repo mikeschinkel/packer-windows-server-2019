@@ -68,10 +68,16 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell",  inline: <<-SHELL
-    Write-Output "Done."
+    Write-Output "Provisioned."
   SHELL
 
   config.vm.provision "shell", run: 'always', inline: <<-SHELL
-    Write-Output "Done."
+#     Added to autounattend.xml instead
+#     Enable RDP — This should IDEALLY be in the Packer file but it doesn't seem to remember this setting
+#     See https://computingforgeeks.com/how-to-enable-remote-desktop-protocol-rdp-on-windows-server-2019/
+#     Set-ItemProperty -Path "HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server" -Name fDenyTSConnections -Value 0
+#     Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    echo "Done."
   SHELL
+
 end
