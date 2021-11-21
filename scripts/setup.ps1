@@ -83,9 +83,13 @@ function prompt {
 New-Item $PROFILE -ItemType File -Force
 Set-Content -Path $PROFILE -Value $psprofile
 
-# Enable RDP - Added to autounattend.xml instead
+# Enable RDP
 # See https://computingforgeeks.com/how-to-enable-remote-desktop-protocol-rdp-on-windows-server-2019/
 Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name fDenyTSConnections -Value 0
 Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+# Fix for WinRM timeout
+# (Speculative: https://github.com/hashicorp/packer/issues/8658#issuecomment-606845986)
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name LocalAccountTokenFilterPolicy -Value 0
 
 

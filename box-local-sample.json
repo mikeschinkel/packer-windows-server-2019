@@ -1,0 +1,13 @@
+{
+  "host_username": "your-macOS-username",
+  "host_password": "your-macOS-password",
+  "headless": false,
+  "memory": 3096,
+  "cpus": 2,
+  "@notes": [
+    "1. This file is listed in .gitignore and will not be committed to the Git repo",
+    "2. You can leave host_password blank and just enter it each time you run `vagrant up`.",
+    "3. Leave headless=false until you get Vagrant working well then set to true.",
+    "4. Set memory and cpus for the VirtualBox VM to your preference"
+  ]
+}
